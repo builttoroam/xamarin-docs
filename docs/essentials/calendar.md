@@ -69,7 +69,7 @@ var calendars = await Calendar.GetCalendarsAsync();
 Alter Default start date for event retrieval: 
 ```
 > [!NOTE]
-> // This will mean requests without a start date passed in, events will be retrieved starting from 7 days ago.
+> // This will mean requests without a start date passed in, will retrieve starting from 7 days ago.
 ```
 Note: The default start date when not altered in TimeSpan.Zero (retrieve forward from DateTime.Now)
 ```csharp
@@ -85,7 +85,7 @@ Alter Default end date for event retrieval:
 ```csharp
 var newDefaultEndDate = new TimeSpan(7, 0, 0, 0);
 Calendar.SetDefaultEndTimeOffset(newDefaultEndDate); 
-// This will mean requests without a end date passed, events will be retrieved until from 7 days after the start date.
+// This will mean requests without an end date passed, will retrieve until 7 days after the start date.
 ```
 
 
