@@ -25,24 +25,21 @@ Open the **AndroidManifest.xml** file under the **Properties** folder and add th
 
 ```xml
 <uses-permission android:name="android.permission.READ_CALENDAR" />
-<uses-permission android:name="android.permission.WRITE_CALENDAR" />
 ```
 
-Or right click on the Android project and open the project's properties. Under **Android Manifest** find the **Required permissions:** area and check the **READ_CALENDAR** and **WRITE_CALENDAR** permission. This will automatically update the **AndroidManifest.xml** file.
+Or right click on the Android project and open the project's properties. Under **Android Manifest** find the **Required permissions:** area and check the **READ_CALENDAR** permission. This will automatically update the **AndroidManifest.xml** file.
 
 # [iOS](#tab/ios)
 
-Your app's **Info.plist** must contain the `NSCalendarsUsageDescription` and the `NSRemindersUsageDescription` key in order to access the device’s calendars & reminders.
+Your app's **Info.plist** must contain the `NSCalendarsUsageDescription` key in order to access the device’s calendars & reminders.
 
-Open the plist editor and add the **Privacy - Calendars Usage Description** and the **Privacy - Reminders Usage Description** property and fill in a value to display to the user.
+Open the plist editor and add the **Privacy - Calendars Usage Description** property and fill in a value to display to the user.
 
 Or manually edit the file and add the following and update the rationale:
 
 ```xml
 <key>NSCalendarsUsageDescription</key>
 <string>Fill in a reason why your app needs access to calendars.</string>
-<key>NSRemindersUsageDescription</key>
-<string>Fill in a reason why your app needs access to reminders.</string>
 ```
 
 # [UWP](#tab/uwp)
@@ -105,7 +102,7 @@ Get all existing events for all calendar that overlap the provided start date an
 ```csharp
 var startDate = DateTimeOffset.Now.
 var events =  await Calendar.GetEventsAsync(startDate: DateTimeOffset.Now.AddDays(14)); 
-// The var events will now hold a list of existing/retrievable events for all calendars where events overlap 14 days from now until the default end date. (List<DeviceEvent>)
+// The var events will now hold a list of existing/retrievable events for all calendars where events overlap 14 days from now until the default end date (in this case 28 days from now). (List<DeviceEvent>)
 ```
 
 Get all existing events for a specific calendar that overlap a start & end date:
