@@ -59,35 +59,18 @@ Add a reference to Xamarin.Essentials in your class:
 using Xamarin.Essentials;
 ```
 
+```
+> [!NOTE]
+> When no dates are set for event retrieval the default will retrieve from now --> 14 days from now
+```
+
+
 Get all existing calendars:
 
 ```csharp
 var calendars = await Calendar.GetCalendarsAsync(); 
 // The var calendars will now hold a list of all existing/retrievable calendars. (List<DeviceCalendar>)
 ```
-
-Alter Default start date for event retrieval: 
-```
-> [!NOTE]
-> // This will mean requests without a start date passed in, will retrieve starting from 7 days ago.
-```
-Note: The default start date when not altered in TimeSpan.Zero (retrieve forward from DateTime.Now)
-```csharp
-var newDefaultStartTime = new TimeSpan(-7, 0, 0, 0);
-Calendar.SetDefaultStartTimeOffset(newDefaultStartTime); 
-```
-
-Alter Default end date for event retrieval: 
-```
-> [!NOTE]
-> The default end date when not altered in TimeSpan.FromDays(14) (retrieve until 14 days after the start date)
-```
-```csharp
-var newDefaultEndDate = new TimeSpan(7, 0, 0, 0);
-Calendar.SetDefaultEndTimeOffset(newDefaultEndDate); 
-// This will mean requests without an end date passed, will retrieve until 7 days after the start date.
-```
-
 
 Get all existing events for all calendars using default date range:
 ```
