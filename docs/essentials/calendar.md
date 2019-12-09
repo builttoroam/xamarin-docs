@@ -90,10 +90,6 @@ try
 	var events =  await Calendar.GetEventsAsync(calendarId); 
 	// The var events will now hold a list of existing/retrievable events for our first calendar. (List<DeviceEvent>)
 }
-catch (ArgumentNullException)
-{
-	// Unable to get any calendars
-}
 ```
 
 
@@ -118,9 +114,29 @@ try
 	var events = await Calendar.GetEventsAsync(calendarId, sDate, eDate); 
 	// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
 }
-catch (ArgumentNullException)
+```
+
+Get event by event Id
+
+```csharp
+using System.Linq;
+
+try
 {
-	// Unable to get any calendars
+	var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
+	var sDate = new DateTimeOffset(2019, 4, 10, 12, 0, 0, TimeSpan.Zero);
+	var eDate = new DateTimeOffset(2019, 4, 10, 13, 0, 0, TimeSpan.Zero);
+	var events = await Calendar.GetEventsAsync(calendarId, sDate, eDate); 
+	var specificEvent = await Calendar.GetEventByIdAsync(events.First().Id));
+	// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
+}
+catch (NullReferenceException)
+{
+	// iOS - invalid event id was passed in
+}
+catch (ArgumentException)
+{
+	// Android, UWP - invalid event id was passed in
 }
 ```
 
