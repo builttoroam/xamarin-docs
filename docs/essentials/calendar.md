@@ -84,12 +84,9 @@ Get all existing events for a specific calendar using default date range:
 ```csharp
 using System.Linq;
 
-try
-{
-	var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
-	var events =  await Calendar.GetEventsAsync(calendarId); 
-	// The var events will now hold a list of existing/retrievable events for our first calendar. (List<DeviceEvent>)
-}
+var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
+var events =  await Calendar.GetEventsAsync(calendarId); 
+// The var events will now hold a list of existing/retrievable events for our first calendar. (List<DeviceEvent>)
 ```
 
 
@@ -106,14 +103,11 @@ Get all existing events for a specific calendar that overlap a start & end date:
 ```csharp
 using System.Linq;
 
-try
-{
-	var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
-	var sDate = new DateTimeOffset(2019, 4, 10, 12, 0, 0, TimeSpan.Zero);
-	var eDate = new DateTimeOffset(2019, 4, 10, 13, 0, 0, TimeSpan.Zero);
-	var events = await Calendar.GetEventsAsync(calendarId, sDate, eDate); 
-	// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
-}
+var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
+var sDate = new DateTimeOffset(2019, 4, 10, 12, 0, 0, TimeSpan.Zero);
+var eDate = new DateTimeOffset(2019, 4, 10, 13, 0, 0, TimeSpan.Zero);
+var events = await Calendar.GetEventsAsync(calendarId, sDate, eDate); 
+// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
 ```
 
 Get event by event Id
