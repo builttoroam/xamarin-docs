@@ -4,7 +4,7 @@ description: "This document describes the Calendar class in Xamarin.Essentials, 
 ms.assetid: a6d5f2a2-0f49-4726-9a74-8e7667ddb127
 author: ScottBTR
 ms.author: ScottYoung-5180
-ms.date: 03/12/2019
+ms.date: 13/12/2019
 ---
 
 # Xamarin.Essentials: Calendar
@@ -84,9 +84,20 @@ Get all existing events for a specific calendar using default date range:
 ```csharp
 using System.Linq;
 
-var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
-var events =  await Calendar.GetEventsAsync(calendarId); 
-// The var events will now hold a list of existing/retrievable events for our first calendar. (List<DeviceEvent>)
+try
+{
+	var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
+	var events =  await Calendar.GetEventsAsync(calendarId); 
+	// The var events will now hold a list of existing/retrievable events for our first calendar. (List<DeviceEvent>)
+}
+catch (ArgumentException)
+{
+	//Android only - A non-integer id was passed in
+}
+catch (ArgumentOutOfRangeException)
+{
+	//An invalid/incorrect id was passed in
+}
 ```
 
 
@@ -102,12 +113,22 @@ Get all existing events for a specific calendar that overlap a start & end date:
 
 ```csharp
 using System.Linq;
-
-var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
-var sDate = new DateTimeOffset(2019, 4, 10, 12, 0, 0, TimeSpan.Zero);
-var eDate = new DateTimeOffset(2019, 4, 10, 13, 0, 0, TimeSpan.Zero);
-var events = await Calendar.GetEventsAsync(calendarId, sDate, eDate); 
-// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
+try
+{
+	var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
+	var sDate = new DateTimeOffset(2019, 4, 10, 12, 0, 0, TimeSpan.Zero);
+	var eDate = new DateTimeOffset(2019, 4, 10, 13, 0, 0, TimeSpan.Zero);
+	var events = await Calendar.GetEventsAsync(calendarId, sDate, eDate); 
+	// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
+}
+catch (ArgumentException)
+{
+	//Android only - A non-integer id was passed in
+}
+catch (ArgumentOutOfRangeException)
+{
+	//An invalid/incorrect id was passed in
+}
 ```
 
 Get event by event Id
@@ -124,13 +145,14 @@ try
 	var specificEvent = await Calendar.GetEventByIdAsync(events.First().Id));
 	// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
 }
-catch (NullReferenceException)
-{
-	// iOS - invalid event id was passed in
-}
 catch (ArgumentException)
 {
-	// Android, UWP - invalid event id was passed in
+	// an invalid/incorrect parater was passed in
+}
+catch (ArgumentOutOfRangeException)
+{
+	// A null/empty parameter was passed in
+	// Or Android only - A non-integer id was passed in
 }
 ```
 
