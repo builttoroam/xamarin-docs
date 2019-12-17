@@ -1,10 +1,10 @@
 ---
-title: "Xamarin.Essentials: Calendar"
-description: "This document describes the Calendar class in Xamarin.Essentials, which lets you view the user's calendar and event information."
+title: "Xamarin.Essentials: Calendars"
+description: "This document describes the Calendars class in Xamarin.Essentials, which lets you view the user's calendar and event information."
 ms.assetid: a6d5f2a2-0f49-4726-9a74-8e7667ddb127
 author: ScottBTR
 ms.author: ScottYoung-5180
-ms.date: 03/12/2019
+ms.date: 17/12/2019
 ---
 
 # Xamarin.Essentials: Calendar
@@ -65,8 +65,8 @@ using Xamarin.Essentials;
 Get all existing calendars:
 
 ```csharp
-var calendars = await Calendar.GetCalendarsAsync(); 
-// The var calendars will now hold a list of all existing/retrievable calendars. (List<DeviceCalendar>)
+var calendars = await Calendars.GetCalendarsAsync(); 
+// The var calendars will now hold a list of all existing/retrievable calendars. (List<Calendar>)
 ```
 
 Get all existing events for all calendars using default date range:
@@ -75,8 +75,8 @@ Get all existing events for all calendars using default date range:
 > When pulling back events they use an 'overlapping' formula, i.e. if I had an event that went from 9:00 - 10:00 and my start or end time intersects that time slot it will be included in the resulting list. 
 ```
 ```csharp
-var events =  await Calendar.GetEventsAsync(); 
-// The var events will now hold a list of existing/retrievable events for all calendars. (List<DeviceEvent>)
+var events =  await Calendars.GetEventsAsync(); 
+// The var events will now hold a list of existing/retrievable events for all calendars. (List<CalendarEvent>)
 ```
 
 Get all existing events for a specific calendar using default date range:
@@ -86,13 +86,17 @@ using System.Linq;
 
 try
 {
-	var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
-	var events =  await Calendar.GetEventsAsync(calendarId); 
-	// The var events will now hold a list of existing/retrievable events for our first calendar. (List<DeviceEvent>)
+	var calendarId = (await Calendars.GetCalendarsAsync()).First().Id;
+	var events =  await Calendars.GetEventsAsync(calendarId); 
+	// The var events will now hold a list of existing/retrievable events for our first calendar. (List<CalendarEvent>)
 }
-catch (ArgumentNullException)
+catch (ArgumentException)
 {
-	// Unable to get any calendars
+	//Android only - A non-integer id was passed in
+}
+catch (ArgumentOutOfRangeException)
+{
+	//An invalid/incorrect id was passed in
 }
 ```
 
@@ -101,26 +105,54 @@ Get all existing events for all calendar that overlap the provided start date an
 
 ```csharp
 var startDate = DateTimeOffset.Now.
-var events =  await Calendar.GetEventsAsync(startDate: DateTimeOffset.Now.AddDays(14)); 
-// The var events will now hold a list of existing/retrievable events for all calendars where events overlap 14 days from now until the default end date (in this case 28 days from now). (List<DeviceEvent>)
+var events =  await Calendars.GetEventsAsync(startDate: DateTimeOffset.Now.AddDays(14)); 
+// The var events will now hold a list of existing/retrievable events for all calendars where events overlap 14 days from now until the default end date (in this case 28 days from now). (List<CalendarEvent>)
 ```
 
 Get all existing events for a specific calendar that overlap a start & end date:
 
 ```csharp
 using System.Linq;
+try
+{
+	var calendarId = (await Calendars.GetCalendarsAsync()).First().Id;
+	var sDate = new DateTimeOffset(2019, 4, 10, 12, 0, 0, TimeSpan.Zero);
+	var eDate = new DateTimeOffset(2019, 4, 10, 13, 0, 0, TimeSpan.Zero);
+	var events = await Calendars.GetEventsAsync(calendarId, sDate, eDate); 
+	// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
+}
+catch (ArgumentException)
+{
+	//Android only - A non-integer id was passed in
+}
+catch (ArgumentOutOfRangeException)
+{
+	//An invalid/incorrect id was passed in
+}
+```
+
+Get event by event Id
+
+```csharp
+using System.Linq;
 
 try
 {
-	var calendarId = (await Calendar.GetCalendarsAsync()).First().Id;
+	var calendarId = (await Calendars.GetCalendarsAsync()).First().Id;
 	var sDate = new DateTimeOffset(2019, 4, 10, 12, 0, 0, TimeSpan.Zero);
 	var eDate = new DateTimeOffset(2019, 4, 10, 13, 0, 0, TimeSpan.Zero);
-	var events = await Calendar.GetEventsAsync(calendarId, sDate, eDate); 
+	var events = await Calendars.GetEventsAsync(calendarId, sDate, eDate); 
+	var specificEvent = await Calendars.GetEventByIdAsync(events.First().Id));
 	// the var events will now hold a list of existing/retrievable events for our first calendar. where the events timeslot overlaps 2019-04-10 12:00 pm - 2019-04-10 1:00 pm
 }
-catch (ArgumentNullException)
+catch (ArgumentException)
 {
-	// Unable to get any calendars
+	// an invalid/incorrect parater was passed in
+}
+catch (ArgumentOutOfRangeException)
+{
+	// A null/empty parameter was passed in
+	// Or Android only - A non-integer id was passed in
 }
 ```
 
@@ -142,6 +174,6 @@ No platform differences.
 
 ## API
 
-- [Calendar source code](https://github.com/xamarin/Essentials/tree/master/Xamarin.Essentials/Calendar)
-- [Calendar API documentation](xref:Xamarin.Essentials.Calendar)
+- [Calendars source code](https://github.com/xamarin/Essentials/tree/master/Xamarin.Essentials/Calendars)
+- [Calendars API documentation](xref:Xamarin.Essentials.Calendars)
 
